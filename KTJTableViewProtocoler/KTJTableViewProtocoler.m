@@ -57,7 +57,40 @@
 
     return [tableView fd_heightForCellWithIdentifier:identifier cacheByIndexPath:indexPath configuration:[self configurationTableView:tableView dataSource:tableView.ktj_dataSource indexPath:indexPath]];
 }
-
+#pragma mark - 精简list
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        [self.delegate tableView:tableView didSelectRowAtIndexPath:indexPath];
+    }
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *view;
+    if ([self.delegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)]) {
+        view = [self.delegate tableView:tableView viewForHeaderInSection:section];
+    }
+    return view;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    UIView *view;
+    if ([self.delegate respondsToSelector:@selector(tableView:viewForFooterInSection:)]) {
+        view = [self.delegate tableView:tableView viewForFooterInSection:section];
+    }
+    return view;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    CGFloat height = CGFLOAT_MIN;
+    if ([self.delegate respondsToSelector:@selector(tableView:heightForFooterInSection:)]) {
+        height = [self.delegate tableView:tableView heightForFooterInSection:section];
+    }
+    return height;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    CGFloat height = CGFLOAT_MIN;
+    if ([self.delegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)]) {
+        height = [self.delegate tableView:tableView heightForHeaderInSection:section];
+    }
+    return height;
+}
 
 @end
 
@@ -77,6 +110,10 @@
     return protocoler;
 }
 - (void)setKtj_protocoler:(KTJTableViewProtocoler *)ktj_protocoler {
+    if (self.ktj_simpleList) {
+        self.dataSource = ktj_protocoler;
+        self.delegate = ktj_protocoler;
+    }
     objc_setAssociatedObject(self, @selector(ktj_protocoler), ktj_protocoler, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -86,5 +123,15 @@
 - (void)setKtj_dataSource:(id)ktj_dataSource {
     objc_setAssociatedObject(self, @selector(ktj_dataSource), ktj_dataSource, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-
+- (void)setKtj_simpleList:(BOOL)ktj_simpleList {
+    if (objc_getAssociatedObject(self, @selector(ktj_protocoler))) {
+        self.dataSource = self.ktj_protocoler;
+        self.delegate = self.ktj_protocoler;
+    }
+    objc_setAssociatedObject(self, @selector(ktj_simpleList), @(ktj_simpleList), OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+- (BOOL)ktj_simpleList {
+    NSNumber *simple = objc_getAssociatedObject(self, @selector(ktj_simpleList));
+    return simple?[simple boolValue]:NO;
+}
 @end

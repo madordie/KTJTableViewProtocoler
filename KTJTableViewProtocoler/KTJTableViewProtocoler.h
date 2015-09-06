@@ -44,6 +44,16 @@
  */
 - (void)ktjtableView:(UITableView *)tableView configureCell:(id)cell withDataSource:(id)dataSource indexPath:(NSIndexPath *)indexPath;
 
+/**
+ *  *** 简单列表 ***
+ */
+@optional
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section;
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section;
+
 @end
 
 
@@ -52,6 +62,11 @@
 @property (nonatomic, strong) KTJTableViewProtocoler *ktj_protocoler;
 
 @property (nonatomic, strong) id ktj_dataSource;
+
+/**
+ *  如果simple == YES, 那么其代理数据源均指向ktj_protocoler。
+ */
+@property (nonatomic, assign) BOOL ktj_simpleList;  // Default NO.
 
 @end
 
