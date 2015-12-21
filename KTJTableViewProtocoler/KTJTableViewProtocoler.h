@@ -72,7 +72,7 @@
 
 @interface UITableViewCell (KTJTableViewProtocoler)
 
-@property (nonatomic, copy, readonly) NSString *ktj_defaultIDFA;
++ (NSString *)ktj_defaultIDFA;
 
 @end
 

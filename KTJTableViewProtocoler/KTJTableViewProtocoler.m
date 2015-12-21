@@ -138,8 +138,8 @@
 
 @implementation UITableViewCell (KTJTableViewProtocoler)
 
-- (NSString *)ktj_defaultIDFA {
-    return NSStringFromClass([self class]);
++ (NSString *)ktj_defaultIDFA {
+    return NSStringFromClass(self);
 }
 
 @end
