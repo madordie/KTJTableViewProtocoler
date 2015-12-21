@@ -135,3 +135,11 @@
     return simple?[simple boolValue]:NO;
 }
 @end
+
+@implementation UITableViewCell (KTJTableViewProtocoler)
+
+- (NSString *)ktj_defaultIDFA {
+    return NSStringFromClass([self class]);
+}
+
+@end
